@@ -1,0 +1,39 @@
+{% extends 'shop/base.html' %}
+{% block body %}
+<h1>Profile</h1>
+First name:{{profile.user.first_name}}
+<form action="{% url 'shop:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="first_name">
+
+</form>
+<br>
+Last name:{{profile.user.last_name}}
+<form action="{% url 'shop:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="last_name">
+</form>
+<br>
+Email:{{profile.user.email}}
+<form action="{% url 'shop:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="email">
+</form>
+{%if completed_orders%}
+<h2>Last orders</h2>
+{%endif%}
+    {%for order in completed_orders%}
+        {%for order_entry in order.order_entries.all%}
+            {{order_entry.product.name}}
+            / {{order_entry.count}}
+            <br>
+        {%endfor%}
+    Total Count: {{order.total_count}}
+    <br>
+    Total Cost: {{order.total_price}}
+    <br>
+    STATUS: {{order.status}}
+    <br>
+    <br>
+{%endfor%}
+{%endblock%}

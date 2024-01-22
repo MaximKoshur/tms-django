@@ -1,0 +1,22 @@
+{% extends 'shop/base.html' %}
+
+{% block body %}
+<h1>Products:</h1>
+<ul>
+    {%for product in products%}
+    <li>
+        <a href="{% url 'shop:products_detail' product.id%}">{{product.name}}</a>
+    </li>
+    {%endfor%}
+</ul>
+<div class="btn-group">
+    <ul>
+        {% for p in context.page_range %}
+            <li style="display: inline; margin-right: 10px;">
+                <a href="{% url 'shop:products_view' p %}">{{ p }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

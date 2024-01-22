@@ -1,0 +1,18 @@
+{% extends 'shop/base.html' %}
+
+{% block body %}
+<h1>{{product.name}}</h1>
+<p>Category: {{product.category.name}}</p>
+
+<p>Price: {{product.price}}</p>
+
+<p>Description: {{product.description}}</p>
+
+{% if user.is_authenticated %}
+            <form action="{% url 'shop:add_to_cart' %}?next={{ request.path }}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{product.id}}" />
+                <input type="submit" value="add_to_cart" class="btn btn-danger"/>
+            </form>
+        {% endif%}
+{% endblock %}
