@@ -137,20 +137,27 @@ def account_page(request):
 @login_required
 def change_profile(request):
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
         profile = Profile.objects.get(user=request.user)
-        if first_name:
+        if 'first_name' in request.POST:
+            first_name = request.POST['first_name']
             profile.user.first_name = first_name
             profile.user.save()
-        if last_name:
+        if 'last_name' in request.POST:
+            last_name = request.POST['last_name']
             profile.user.last_name = last_name
             profile.user.save()
-        if email:
+        if 'email' in request.POST:
+            email = request.POST['email']
             profile.user.email = email
             profile.user.save()
         return redirect('shop:account_page')
+
+
+@login_required
+def orders_history(request):
+    profile = Profile.objects.get(user=request.user)
+    completed_orders = Order.objects.filter(status='COMPLETED', profile=profile).order_by('-id')[:5]
+    return render(request, 'shop/orders_history.html', {'completed_orders': completed_orders})
 
 
 
