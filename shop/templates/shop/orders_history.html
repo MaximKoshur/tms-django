@@ -1,0 +1,19 @@
+{% extends 'shop/base.html' %}
+{% block body %}
+<h1>Orders History:</h1>
+
+    {%for order in completed_orders%}
+        {%for order_entry in order.order_entries.all%}
+        <a href="{% url 'shop:products_detail' order_entry.product.id%}">{{order_entry.product.name}}</a>
+            / {{order_entry.count}}
+            <br>
+        {%endfor%}
+    Total Count: {{order.total_count}}
+    <br>
+    Total Cost: {{order.total_price}}
+    <br>
+    STATUS: {{order.status}}
+    <br>
+    <br>
+{%endfor%}
+{%endblock%}
