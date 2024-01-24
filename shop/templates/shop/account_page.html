@@ -7,19 +7,21 @@ First name:{{profile.user.first_name}}
 <form action="{% url 'shop:change_profile' %}" method="post">
     {% csrf_token %}
     <input type="text" name="first_name">
-
+    <input type="submit" value="update" class="btn btn-danger"/>
 </form>
 <br>
 Last name:{{profile.user.last_name}}
 <form action="{% url 'shop:change_profile' %}" method="post">
     {% csrf_token %}
     <input type="text" name="last_name">
+    <input type="submit" value="update" class="btn btn-danger"/>
 </form>
 <br>
 Email:{{profile.user.email}}
 <form action="{% url 'shop:change_profile' %}" method="post">
     {% csrf_token %}
     <input type="text" name="email">
+    <input type="submit" value="update" class="btn btn-danger"/>
 </form>
 {%if completed_orders%}
 <h2>Last orders</h2>

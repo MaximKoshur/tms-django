@@ -26,6 +26,7 @@
             <form action="{% url 'shop:change_count' %}" method="post">
               {% csrf_token %}
               <input type="number" name="count" min="0" step="1">
+              <input type="submit" value="update" class="btn btn-danger"/>
               <input type="hidden" name="product_id" value="{{ x.product.id }}">
             </form>
             <form action="{% url 'shop:del_from_cart' %}" method="post">

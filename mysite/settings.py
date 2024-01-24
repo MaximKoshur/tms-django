@@ -39,6 +39,9 @@ if not DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'api',
+    'corsheaders',
+    'rest_framework',
     'shop',
     'polls',
     'crispy_forms',
@@ -53,6 +56,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     #'django.middleware.cache.UpdateCacheMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -99,6 +104,9 @@ DATABASES = {
    }
 }
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
 
 
 # Password validation

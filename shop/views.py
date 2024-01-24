@@ -1,3 +1,5 @@
+import copy
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from .models import Product, Category, Order, Profile, OrderEntry
@@ -39,10 +41,6 @@ def logout_view(request):
 
 
 def products_view(request, page_number=1):
-    # if page_number > 4:
-    #     page_number = 4
-    # if page_number < 1:
-    #     page_number = 1
     context = Paginator(Product.objects.all().order_by('category'), 2)
     page_obj = context.get_page(page_number)
     return render(request, 'shop/products.html', {'products': page_obj, 'context': context})
@@ -82,6 +80,8 @@ def add_to_cart(request):
             profile[0].shopping_cart = Order.objects.create(profile=profile[0])
             profile[0].save()
         basket = OrderEntry.objects.filter(order=profile[0].shopping_cart, order__status='INITIAL')
+        print(profile[0].shopping_cart)
+        print(basket)
         return render(request, 'shop/add_to_cart.html', {'basket': basket, 'price': profile[0].shopping_cart.total_price()})
 
 
@@ -154,10 +154,27 @@ def change_profile(request):
 
 
 @login_required
-def orders_history(request):
+def orders_history(request, page_number=1):
     profile = Profile.objects.get(user=request.user)
-    completed_orders = Order.objects.filter(status='COMPLETED', profile=profile).order_by('-id')[:5]
-    return render(request, 'shop/orders_history.html', {'completed_orders': completed_orders})
+    completed_orders = Paginator(Order.objects.filter(status='COMPLETED', profile=profile).order_by('-id')[:5], 3)
+    page_obj = completed_orders.get_page(page_number)
+    return render(request, 'shop/orders_history.html', {'context': completed_orders, 'orders': page_obj})
+
+
+@login_required
+def repeat_order(request):
+    if request.method == 'POST':
+        order_id = request.POST['order_id']
+        profile = Profile.objects.get(user=request.user)
+        order = Order.objects.get(id=order_id, profile=profile)
+        profile.shopping_cart.delete()
+        new_order = Order.objects.create(profile=profile, status='INITIAL')
+        order_entries = OrderEntry.objects.filter(order=order)
+        for entry in order_entries:
+            OrderEntry.objects.create(order=new_order, product=entry.product, count=entry.count)
+        profile.shopping_cart = new_order
+        profile.save()
+        return redirect('shop:add_to_cart')
 
 
 
