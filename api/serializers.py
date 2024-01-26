@@ -1,5 +1,6 @@
-from polls.models import Question, Choice
 from rest_framework import serializers
+
+from polls.models import Question, Choice
 
 
 class ChoiceSerializer(serializers.ModelSerializer):

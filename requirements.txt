@@ -15,3 +15,6 @@ six==1.16.0
 sqlparse==0.4.4
 toposort==1.10
 typing_extensions==4.9.0
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+django-debug-toolbar==4.2.0

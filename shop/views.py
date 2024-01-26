@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -82,7 +83,8 @@ def add_to_cart(request):
         basket = OrderEntry.objects.filter(order=profile[0].shopping_cart, order__status='INITIAL')
         print(profile[0].shopping_cart)
         print(basket)
-        return render(request, 'shop/add_to_cart.html', {'basket': basket, 'price': profile[0].shopping_cart.total_price()})
+        return render(request, 'shop/add_to_cart.html',
+                      {'basket': basket, 'price': profile[0].shopping_cart.total_price()})
 
 
 @login_required
@@ -175,6 +177,3 @@ def repeat_order(request):
         profile.shopping_cart = new_order
         profile.save()
         return redirect('shop:add_to_cart')
-
-
-
