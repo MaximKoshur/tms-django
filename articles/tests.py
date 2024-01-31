@@ -35,11 +35,16 @@ class ArticlesDetailViewTest(TestCase):
 
 class ArticlesPopularTest(TestCase):
     def setUp(self):
-        Article.objects.create(id=1, text='Test Article Text', name='Text', author='Text', like_count=1000)
+        Article.objects.create(id=1, text='Test Article Text', name='Text', author='Text', like_count=3)
+        Article.objects.create(id=2, text='Test Article Text', name='Text', author='Text', like_count=1000)
 
-    def is_it_popular(self):
-        self.setUp()
+    def test_is_it_popular(self):
         context = Article.objects.get(id=1)
+        article = context.is_popular()
+        self.assertEqual(False, article)
+
+    def test_is_it_unpopular(self):
+        context = Article.objects.get(id=2)
         article = context.is_popular()
         self.assertEqual(True, article)
 
