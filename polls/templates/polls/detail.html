@@ -1,10 +1,8 @@
+{% extends 'polls/base.html' %}
 
 {% block title %}Poll{% endblock %}
 
 {% block body %}
-
-
-
       <form action="{% url 'polls:vote' question.id %}" method="post">
         {% csrf_token %}
         <fieldset>
@@ -12,7 +10,7 @@
             {% if error_message %}
                 <p><strong>{{ error_message }}</strong></p>
             {% endif %}
-            {% for choice in question.choice.all|dictsort:'choice_text' %}
+            {% for choice in question.choices.all|dictsort:'choice_text' %}
                 <input type="radio" name="choice" value="{{ choice.id }}"
                        id="choice-{{ forloop.counter }}"/>
                 <label for="choice-{{ forloop.counter }}">
@@ -22,6 +20,4 @@
         </fieldset>
         <input type="submit" value="Vote"/>
     </form>
-
-
 {% endblock %}

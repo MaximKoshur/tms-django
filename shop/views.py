@@ -175,5 +175,6 @@ def repeat_order(request):
         for entry in order_entries:
             OrderEntry.objects.create(order=new_order, product=entry.product, count=entry.count)
         profile.shopping_cart = new_order
+        print(profile.shopping_cart)
         profile.save()
         return redirect('shop:add_to_cart')

@@ -6,7 +6,6 @@ from django.db import transaction
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(30)
 def index(request):
     questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
     context = {'latest_question_list': questions}
@@ -22,7 +21,7 @@ def detail(request, question_id: int):
 def vote(request, question_id: int):
     question = get_object_or_404(Question, id=question_id)
     try:
-        selected_choice = question.choice.get(id=request.POST['choice'])
+        selected_choice = question.choices.get(id=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {
             'error_message': "You didn't select a choice",
@@ -48,7 +47,7 @@ def create_question(request):
             question = Question(question_text=question_text, pub_date=pub_date)
             question.save()
             for choice_text in form.cleaned_data['choice'].split('\n'):
-                question.choice.create(choice_text=choice_text, votes=0)
+                question.choices.create(choice_text=choice_text, votes=0)
             return redirect('polls:detail', question.id)
     else:
         form = QuestionForm()

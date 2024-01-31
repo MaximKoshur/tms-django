@@ -1,21 +1,40 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import signals
+# Create your models here.
+from django.contrib import admin
+from django.db import models
+from django.db.models import QuerySet
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
 
 
 class Question(models.Model):
+    class Status(models.TextChoices):
+        NEW = 'NW', _('New')
+        REJECTED = 'RJ', _('Rejected')
+        APPROVED = 'AP', _('Approved')
+
+
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField(verbose_name="date published")
+    status = models.CharField(max_length=2, choices=Status, default=Status.NEW)
+    objects: QuerySet = models.Manager()
 
-    class MyModels(models.Model):
-        my_field = models.CharField(max_length=100, db_index=True)
 
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - timezone.timedelta(days=1) <= self.pub_date
-
-    def __str__(self):
+    def str(self):
         return self.question_text
+
+    @admin.display(
+        boolean=True,
+        description='Published recently?',
+        ordering='pub_date'
+    )
+    def was_published_recently(self):
+        if not self.pub_date:
+            return False
+        now = timezone.now()
+        return now - timezone.timedelta(days=1) <= self.pub_date <= now
 
 
 class Choice(models.Model):
@@ -23,28 +42,11 @@ class Choice(models.Model):
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
 
-    def __str__(self):
+    def str(self):
         return f'{self.question.question_text} - {self.choice_text}'
 
-
-def my_callback(sender, *args, **kwargs):
-    print(f'Pre init. Sender: {sender}, args: {args}, kwargs: {kwargs}')
-
-
-signals.pre_init.connect(my_callback, sender=Question)
-
-
-class BaseUser(models.Model):
-    username = models.CharField(max_length=100)
-
-    class Meta:
-        abstract = True
-
-class Manager(BaseUser):
-    project = models.CharField(max_length=100)
-
-class Engineer(BaseUser):
-    language = models.CharField(max_length=100)
-
-
-#Question.object.bulk_create([Question(question_text='1',pub_date=timezone.now()),Question(question_text='2',pub_date=timezone.now()),])
+    @admin.display(
+        description="Question"
+    )
+    def get_question_text(self):
+        return self.question.question_text

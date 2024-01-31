@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+</head>
+<h1>Articles</h1>
+<body>
+<ul>
+ {%if context%}
+ {%for article in context%}
+    <li>
+        <a href="{% url 'articles:articles_id' article.id%}">{{article.name}}</a>
+    </li>
+    {%endfor%}
+  {%else%}
+  No articles are available
+  {%endif%}
+</ul>
+</body>
+</html>

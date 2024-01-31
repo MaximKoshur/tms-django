@@ -39,6 +39,7 @@ if not DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'articles',
     'api',
     'corsheaders',
     'rest_framework',
@@ -113,6 +114,12 @@ CORS_ALLOWED_ORIGINS = [
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+
+REST_FRAMEWORK = {
+   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+   'PAGE_SIZE': 5
+}
 
 
 # Password validation
