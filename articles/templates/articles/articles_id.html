@@ -7,10 +7,11 @@
 <h1>
     <a href="{% url 'articles:articles'%}">Articles</a>
 </h1>
+
 <body>
 {{context.name}}
+<br>
 {{context.text}}
-{{context.author}}
 </body>
 <form action="{% url 'articles:like' %}" method="post">
                 {% csrf_token %}
@@ -18,4 +19,14 @@
                 <input type="submit" value="Like" class="btn btn-danger"/>
     </form>
  {{context.like_count}}
+<h2>Authors</h2>
+{%for author in context.author.all%}
+<a href="{% url 'articles:author_detail' author.id%}">{{author.first_name}}</a>
+<br>
+{{author.last_name}}
+<br>
+{{author.date_of_birth}}
+<br>
+<br>
+{%endfor%}
 </html>

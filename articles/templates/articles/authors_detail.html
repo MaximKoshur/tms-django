@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>{{ author.first_name }}</title>
+</head>
+<body>
+<h1>
+    <a href="{% url 'articles:articles'%}">Articles</a>
+</h1>
+    <h1>{{ author.last_name }}</h1>
+    {{author.first_name}}
+    <p>Date of Birth: {{ author.date_of_birth }}</p>
+
+    <h2>Articles:</h2>
+    <ul>
+        {% for article in articles %}
+            <li><a href="{% url 'articles:articles_id' article.id %}">{{ article.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
