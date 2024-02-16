@@ -1,0 +1,26 @@
+{
+  "Food": {
+    "Apple": {
+      "name": "Apple",
+      "price": 1,
+      "description": "Apppple"
+  },
+    "Banana": {
+      "name": "Banana",
+      "price": 2,
+      "description": "Baaaanana"
+    }
+  },
+  "Electronics": {
+    "Iphone15": {
+      "name": "Iphone15",
+      "price": 100,
+      "description": "Iphooone15"
+  },
+    "Iphone13": {
+      "name": "Iphone13",
+      "price": 80,
+      "description": "Iphooone13"
+    }
+  }
+}

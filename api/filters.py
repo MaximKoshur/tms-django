@@ -14,3 +14,15 @@ class ChoiceCountFilter(filters.BaseFilterBackend):
                 .filter(choice_count__lte=max_choice_count)
         return queryset
 
+
+class ArticleTextFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        min_article_text_length = request.query_params.get('min_article_text_length')
+        max_article_text_length = request.query_params.get('max_article_text_length')
+        if min_article_text_length is not None and max_article_text_length is not None:
+            queryset = queryset \
+                .annotate(choice_count=Count('article'))\
+                .filter(choice_count__gte=min_article_text_length) \
+                .filter(choice_count__lte=max_article_text_length)
+        return queryset
+
